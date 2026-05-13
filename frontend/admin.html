@@ -13,50 +13,90 @@
     <div id="users" class="user-container"></div>
 
 <script>
+
 function loadUsers() {
-    fetch("http://localhost:5000/admin/users")
+
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:5000/admin/users", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(data => {
+
+        console.log("Backend Response:", data);
+
         const container = document.getElementById("users");
         container.innerHTML = "";
 
-        // ERROR FIX: Agar data array nahi hai toh data.users ko check karega
-        const usersArray = Array.isArray(data) ? data : (data.users || []);
+        // Agar data array nahi hai toh data.users check karega
+        const usersArray = Array.isArray(data)
+            ? data
+            : (data.users || []);
 
         if (usersArray.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>No users found.</p>";
+            container.innerHTML =
+                "<p style='text-align:center;'>No users found.</p>";
             return;
         }
 
         usersArray.forEach((user, index) => {
+
             const div = document.createElement("div");
             div.classList.add("user-card");
             div.style.animationDelay = `${index * 0.1}s`;
 
-            // Note: Make sure your backend sends _id or id
             const userId = user._id || user.id;
 
             div.innerHTML = `
-                <p class="username"><strong>User:</strong> ${user.username}</p>
+                <p class="username">
+                    <strong>User:</strong> ${user.username}
+                </p>
+
                 <p class="email">${user.email}</p>
-                <p class="status ${user.isActive ? "active" : "inactive"}">
-                    ${user.isActive ? "Active ✅" : "Inactive ❌"}
+
+                <p class="status ${
+                    user.isActive ? "active" : "inactive"
+                }">
+                    ${
+                        user.isActive
+                        ? "Active ✅"
+                        : "Inactive ❌"
+                    }
                 </p>
 
                 <div class="btn-group">
-                    <button class="btn activate" onclick="activate('${userId}')">Activate</button>
-                    <button class="btn deactivate" onclick="deactivate('${userId}')">Deactivate</button>
-                    <button class="btn delete" onclick="deleteUser('${userId}')">Delete</button>
+                    <button class="btn activate"
+                        onclick="activate('${userId}')">
+                        Activate
+                    </button>
+
+                    <button class="btn deactivate"
+                        onclick="deactivate('${userId}')">
+                        Deactivate
+                    </button>
+
+                    <button class="btn delete"
+                        onclick="deleteUser('${userId}')">
+                        Delete
+                    </button>
                 </div>
             `;
+
             container.appendChild(div);
         });
     })
     .catch(err => {
         console.error("Fetch error:", err);
-        document.getElementById("users").innerHTML = " Error: Backend server is not responding.";
+        document.getElementById("users").innerHTML =
+            "Error: Backend server is not responding.";
     });
 }
+
 
 function activate(id) {
     fetch(`http://localhost:5000/admin/activate/${id}`, { method: "POST" })

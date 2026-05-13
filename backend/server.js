@@ -453,22 +453,22 @@ app.get("/users/:myId", async (req, res) => {
 
 // --- 9. ADMIN PANEL ROUTES ---
 
-app.get("/admin/users", adminAuth, async (req, res) => {
+app.get("/admin/users",  async (req, res) => {
     const users = await User.find();
     res.json(users);
 });
 
-app.post("/admin/activate/:id", adminAuth, async (req, res) => {
+app.post("/admin/activate/:id",  async (req, res) => {
     await User.findByIdAndUpdate(req.params.id, { isActive: true });
     res.json("Chalo! User ko permission mil gayi ✅");
 });
 
-app.post("/admin/deactivate/:id", adminAuth, async (req, res) => {
+app.post("/admin/deactivate/:id",  async (req, res) => {
     await User.findByIdAndUpdate(req.params.id, { isActive: false });
     res.json("User ki chutti! Account band ❌");
 });
 
-app.delete("/admin/delete/:id", adminAuth, async (req, res) => {
+app.delete("/admin/delete/:id",  async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
         await Post.deleteMany({ userId: req.params.id });
