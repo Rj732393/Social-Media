@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+}
+
+.container {
+    width: 60%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+/* SEARCH BAR */
+.top-bar {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+#searchUser {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+/* USER CARD */
+.user-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+}
+
+/* LEFT */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #1877f2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* BUTTON */
+.user-card button {
+    background: #1877f2;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-card button:hover {
+    background: #0f5dc2;
+}
+
+/* FRIEND MENU */
+.friend-actions {
+    position: relative;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.menu button {
+    display: block;
+    width: 120px;
+    padding: 8px;
+    background: white;
+    color: black;
+    text-align: left;
+}
+
+.menu button:hover {
+    background: #f1f1f1;
+}
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: #f0f2f5;
+        border-radius: 20px;
+        padding: 5px 15px;
+    }
+    .search-icon {
+        margin-right: 10px;
+    }
+    #searchUser {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        padding: 10px 0;
+    }
+    .section-header {
+        padding: 15px;
+        color: #333;
+        font-weight: bold;
+    }
+    .loading-text {
+        text-align: center;
+        color: gray;
+        margin-top: 20px;
+        font-style: italic;
+    }
+
+    .back-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: 0.3s;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+}
+
+.back-btn:hover {
+    background: white;
+    box-shadow: var(--shadow);
+    transform: translateX(-3px);
+}

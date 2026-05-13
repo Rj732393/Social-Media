@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends ✨</title>
+    <link rel="stylesheet" href="friends.css">
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">← Back</button>
+<div class="page-header">
+    <h1>👥 Friends</h1>
+    <p>Manage your connections</p>
+</div>
+
+<div class="friends-layout">
+
+    <!-- LEFT - Received Requests -->
+    <div class="column">
+        <div class="column-header">
+            <span class="col-icon">📩</span>
+            <h3>Received Requests</h3>
+            <span class="badge" id="receivedBadge">0</span>
+        </div>
+        <div id="receivedList" class="card-list"></div>
+    </div>
+
+    <!-- CENTER - My Friends -->
+    <div class="column center-col">
+        <div class="column-header">
+            <span class="col-icon">💜</span>
+            <h3>My Friends</h3>
+            <span class="badge" id="friendsBadge">0</span>
+        </div>
+        <div id="myFriendsList" class="card-list"></div>
+    </div>
+
+    <!-- RIGHT - Sent Requests -->
+    <div class="column">
+        <div class="column-header">
+            <span class="col-icon">📤</span>
+            <h3>Sent Requests</h3>
+            <span class="badge" id="sentBadge">0</span>
+        </div>
+        <div id="sentList" class="card-list"></div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script>
+const userId = localStorage.getItem("userId");
+const token  = localStorage.getItem("token");  // ✅ token ek jagah store karo
+if (!userId) window.location.href = "login.html";
+
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+async function loadAllData() {
+    try {
+        const [resFriends, resReceived, resSent] = await Promise.all([
+            fetch(`http://localhost:5000/friends/${userId}`),
+            fetch(`http://localhost:5000/requests/received/${userId}`),
+            fetch(`http://localhost:5000/requests/${userId}`)
+        ]);
+
+        const friends  = await resFriends.json();
+        const received = await resReceived.json();
+        const sent     = await resSent.json();
+
+        displayFriends(friends);
+        displayReceived(received);
+        displaySent(sent);
+
+        document.getElementById("friendsBadge").textContent  = friends.length  || 0;
+        document.getElementById("receivedBadge").textContent = received.length || 0;
+        document.getElementById("sentBadge").textContent     = sent.length     || 0;
+
+    } catch (err) {
+        console.error("Error loading data:", err);
+    }
+}
+
+function getAvatar(name) {
+    return name ? name.charAt(0).toUpperCase() : "U";
+}
+
+function displayFriends(data) {
+    const container = document.getElementById("myFriendsList");
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-emoji">🌸</div>
+                <p>No friends yet!<br>Start exploring!</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = data.map(f => `
+        <div class="user-card friend-card" onclick="goToProfile('${f._id}')">
+            <div class="avatar">${getAvatar(f.username)}</div>
+            <div class="user-info">
+                <strong>${f.username}</strong>
+                <span>Tap to view profile</span>
+            </div>
+            <div class="actions" onclick="event.stopPropagation()">
+                <button class="btn-chat"     onclick="goToChat('${f._id}')">💬</button>
+                <button class="btn-unfriend" onclick="unfriend('${f._id}')">💔</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function displayReceived(data) {
+    const container = document.getElementById("receivedList");
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-emoji">🌷</div>
+                <p>No requests yet!</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = data.map(req => `
+        <div class="user-card" onclick="goToProfile('${req.sender._id}')">
+            <div class="avatar">${getAvatar(req.sender.username)}</div>
+            <div class="user-info">
+                <strong>${req.sender.username}</strong>
+                <span>Wants to connect</span>
+            </div>
+            <div class="actions" onclick="event.stopPropagation()">
+                <button class="btn-accept" onclick="handleRequest('${req._id}', 'accept', this)">✅</button>
+                <button class="btn-reject" onclick="handleRequest('${req._id}', 'reject', this)">❌</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function displaySent(data) {
+    const container = document.getElementById("sentList");
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-emoji">✉️</div>
+                <p>No sent requests!</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = data.map(req => `
+        <div class="user-card" onclick="goToProfile('${req.receiver?._id}')">
+            <div class="avatar">${getAvatar(req.receiver?.username)}</div>
+            <div class="user-info">
+                <strong>${req.receiver?.username || 'User'}</strong>
+                <span>Request sent</span>
+            </div>
+            <div class="actions" onclick="event.stopPropagation()">
+                <span class="pending-badge">Pending</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function handleRequest(requestId, action, btn) {
+    btn.disabled  = true;
+    btn.innerText = "⏳";
+
+    const endpoint = action === 'accept' ? 'accept-request' : 'reject-request';
+
+    try {
+        const res = await fetch(`http://localhost:5000/${endpoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`   // ✅ auth header
+            },
+            body: JSON.stringify({ requestId })
+        });
+
+        if (res.ok) {
+            showToast(action === 'accept' ? "Friend request accepted! 🎉" : "Request rejected!");
+            await loadAllData();
+        } else {
+            const err = await res.json();
+            showToast("Error: " + err.message);
+            btn.disabled = false;
+        }
+    } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+    }
+}
+
+// ✅ FIX: token added, body mein sirf friendId (server token se myId lega)
+async function unfriend(friendId) {
+    if (!confirm("Pakka unfriend karna hai? 💔")) return;
+
+    try {
+        const res = await fetch("http://localhost:5000/unfriend", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`   // ✅ FIXED
+            },
+            body: JSON.stringify({ friendId })        // ✅ server req.userId use karega token se
+        });
+
+        if (res.ok) {
+            showToast("Unfriended 💔");
+            await loadAllData();
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+function goToProfile(friendId) {
+    window.location.href = `friend-profile.html?id=${friendId}`;
+}
+
+function goToChat(friendId) {
+    window.location.href = `chat.html?openUser=${friendId}`;
+}
+
+window.onload = loadAllData;
+</script>
+
+</body>
+</html>

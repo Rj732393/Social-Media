@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+    <link rel="stylesheet" href="explore.css">
+</head>
+
+<body>
+<button class="back-btn" onclick="history.back()">← Back</button>
+<div class="container">
+    <div class="top-bar"> 
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchUser" placeholder="Apne kisi khaas ko dhundiye... ✨">
+        </div>
+    </div>
+
+    <div class="section-header">
+        <h3>Naye Log, Nayi Dosti 🤝</h3>
+    </div>
+
+    <div id="usersList" class="users-grid">
+        <p class="loading-text">Dost dhund rahe hain, thoda sabr karein... ⏳</p>
+    </div>
+
+</div>
+
+<script src="explore.js"></script>
+</body>
+</html>

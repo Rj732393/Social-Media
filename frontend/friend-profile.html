@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile ✨</title>
+    <link rel="stylesheet" href="friend-profile.css">
+</head>
+<body>
+
+<button class="back-btn" onclick="history.back()">← Back</button>
+
+<!-- ── COVER ── -->
+<div class="cover">
+    <img id="coverImg" src="https://via.placeholder.com/1200x280/f5eeff/6938be?text=+" class="cover-img">
+</div>
+
+<!-- ── PROFILE INFO ── -->
+<div class="profile-info">
+
+    <div class="profile-pic-wrap">
+        <img id="profilePic" src="https://via.placeholder.com/110/6938be/ffffff?text=U" class="profile-pic">
+    </div>
+
+    <h2 id="username">Username</h2>
+    <p id="bio">No bio yet...</p>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div>
+            <strong id="postCount">0</strong>
+            <span>Posts</span>
+        </div>
+        <div>
+            <strong id="friendCount">0</strong>
+            <span>Friends</span>
+        </div>
+        <div>
+            <strong id="likeCount">0</strong>
+            <span>Likes</span>
+        </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="profile-actions" id="profileActions">
+        <!-- Dynamically loaded by loadButtons() -->
+    </div>
+
+</div>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+    <button class="active" onclick="showTab('posts', event)">📸 Posts</button>
+    <button onclick="showTab('about', event)">👤 About</button>
+</div>
+
+<!-- ── POSTS TAB ── -->
+<div id="posts" class="tab active">
+    <div id="friendPosts" class="grid"></div>
+</div>
+
+<!-- ── ABOUT TAB ── -->
+<div id="about" class="tab">
+    <div class="about-card">
+        <div class="about-row">
+            <div class="about-icon">🎂</div>
+            <div>
+                <div class="about-label">Date of Birth</div>
+                <div class="about-value" id="dob">—</div>
+            </div>
+        </div>
+        <div class="about-row">
+            <div class="about-icon">🌸</div>
+            <div>
+                <div class="about-label">Gender</div>
+                <div class="about-value" id="gender">—</div>
+            </div>
+        </div>
+        <div class="about-row">
+            <div class="about-icon">📅</div>
+            <div>
+                <div class="about-label">Joined</div>
+                <div class="about-value" id="joined">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div id="toast" class="toast"></div>
+
+<script>
+const myId     = localStorage.getItem("userId");
+const token    = localStorage.getItem("token");
+if (!myId) window.location.href = "login.html";
+
+const params   = new URLSearchParams(window.location.search);
+const friendId = params.get("id");
+if (!friendId) window.location.href = "friends.html";
+
+// ── TOAST ──
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+// ── TAB SWITCH ──
+function showTab(tab, e) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+    document.getElementById(tab).classList.add("active");
+    e.target.classList.add("active");
+}
+
+// ── DYNAMIC BUTTONS ──
+async function loadButtons() {
+    const resFriends  = await fetch(`http://localhost:5000/friends/${myId}`);
+    const friends     = await resFriends.json();
+    const isFriend    = friends.some(f => f._id === friendId);
+
+    const resRequests = await fetch(`http://localhost:5000/all-requests/${myId}`);
+    const requests    = await resRequests.json();
+    const rel         = requests.find(r =>
+        (r.sender?._id === friendId || r.receiver?._id === friendId) ||
+        (r.sender === friendId || r.receiver === friendId)
+    );
+
+    const actionsDiv = document.getElementById("profileActions");
+
+    if (isFriend) {
+        actionsDiv.innerHTML = `
+            <button class="msg-btn"      onclick="goToChat()">💬 Message</button>
+            <button class="unfriend-btn" onclick="unfriend()">👋 Unfriend</button>
+            <button class="block-btn"    onclick="blockUser()">🚫 Block</button>
+        `;
+    } else if (rel && rel.status === "pending" && (rel.sender?._id === myId || rel.sender === myId)) {
+        actionsDiv.innerHTML = `
+            <button class="unfriend-btn" disabled>⏳ Pending</button>
+            <button class="block-btn" onclick="blockUser()">🚫 Block</button>
+        `;
+    } else if (rel && rel.status === "pending" && (rel.receiver?._id === myId || rel.receiver === myId)) {
+        actionsDiv.innerHTML = `
+            <button class="msg-btn"   onclick="acceptRequest('${rel._id}')">✅ Accept</button>
+            <button class="block-btn" onclick="blockUser()">🚫 Block</button>
+        `;
+    } else {
+        actionsDiv.innerHTML = `
+            <button class="msg-btn"   onclick="sendRequest()">➕ Add Friend</button>
+            <button class="block-btn" onclick="blockUser()">🚫 Block</button>
+        `;
+    }
+}
+
+// ── LOAD USER DATA ──
+async function loadFriend() {
+    const res  = await fetch(`http://localhost:5000/user/${friendId}`);
+    const data = await res.json();
+
+    document.getElementById("username").innerText = data.username || "User";
+    document.getElementById("bio").innerText      = data.bio      || "No bio yet...";
+    document.getElementById("gender").innerText   = data.gender   || "—";
+    document.getElementById("friendCount").innerText = (data.friends || []).length;
+
+    if (data.dob) {
+        document.getElementById("dob").innerText = new Date(data.dob)
+            .toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    if (data.createdAt) {
+        document.getElementById("joined").innerText = new Date(data.createdAt)
+            .toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    if (data.profilePic) document.getElementById("profilePic").src = data.profilePic;
+    if (data.coverImage) document.getElementById("coverImg").src   = data.coverImage;
+}
+
+// ── LOAD POSTS ──
+async function loadPosts() {
+    const res  = await fetch(`http://localhost:5000/posts/user/${friendId}`);
+    const data = await res.json();
+
+    document.getElementById("postCount").innerText = data.length;
+    const totalLikes = data.reduce((sum, post) => sum + (post.likes?.length || 0), 0);
+    document.getElementById("likeCount").innerText = totalLikes;
+
+    const container = document.getElementById("friendPosts");
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-posts">
+                <div class="emoji">📸</div>
+                <p>No posts yet!</p>
+            </div>`;
+        return;
+    }
+
+    data.forEach(post => {
+        const div = document.createElement("div");
+        div.classList.add("post");
+        div.innerHTML = `
+            <img src="${post.mediaUrl || 'https://via.placeholder.com/300/6938be/ffffff?text=Post'}" loading="lazy">
+            <div class="overlay">
+                ❤️ ${post.likes?.length || 0}
+                &nbsp;&nbsp;
+                💬 ${post.comments?.length || 0}
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ── SEND REQUEST ── ✅ FIX: token added, senderId removed from body
+async function sendRequest() {
+    try {
+        const res  = await fetch("http://localhost:5000/send-request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`   // ✅ FIXED
+            },
+            body: JSON.stringify({ receiverId: friendId }) // ✅ server token se senderId lega
+        });
+        const data = await res.json();
+        showToast(data.message);
+        loadButtons();
+    } catch (err) {
+        showToast("Request nahi gayi 😕");
+    }
+}
+
+// ── ACCEPT REQUEST ──
+async function acceptRequest(requestId) {
+    const res  = await fetch("http://localhost:5000/accept-request", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ requestId })
+    });
+    const data = await res.json();
+    showToast(data.message);
+    loadButtons();
+}
+
+// ── MESSAGE ──
+function goToChat() {
+    window.location.href = `chat.html?openUser=${friendId}`;
+}
+
+// ── UNFRIEND ──
+async function unfriend() {
+    if (!confirm("Pakka unfriend karna hai? 💔")) return;
+    const res  = await fetch("http://localhost:5000/unfriend", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`   // ✅ auth header
+        },
+        body: JSON.stringify({ friendId })        // server token se myId lega
+    });
+    const data = await res.json();
+    showToast(data.message);
+    setTimeout(() => history.back(), 1500);
+}
+
+// ── BLOCK ──
+async function blockUser() {
+    if (!confirm("Is user ko block karna hai? 🚫")) return;
+    const res  = await fetch("http://localhost:5000/block-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ myId, blockId: friendId })
+    });
+    const data = await res.json();
+    showToast(data.message);
+    setTimeout(() => history.back(), 1500);
+}
+
+// ── INIT ──
+document.addEventListener("DOMContentLoaded", () => {
+    loadFriend();
+    loadPosts();
+    loadButtons();
+});
+</script>
+</body>
+</html>

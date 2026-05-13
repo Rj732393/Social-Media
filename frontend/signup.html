@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="signup.css">
+
+</head>
+<body>
+<div class="signup-container">
+
+    <!-- LEFT -->
+    <div class="signup-left">
+
+        <div class="form-box">
+
+            <h2>Create Account 💖</h2>
+            <p class="subtitle">Join the Durga community</p>
+
+            <div class="input-group">
+                <input id="username" required>
+                <label>Name</label>
+            </div>
+
+            <div class="input-group">
+                <input id="phone" required>
+                <label>Phone Number</label>
+            </div>
+
+            <div class="input-group">
+                <input id="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-group">
+                <input id="dob" type="date" required>
+                <label>DOB</label>
+            </div>
+
+            <div class="input-group">
+                <input id="password" type="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="input-group">
+                <input id="repassword" type="password" required>
+                <label>Confirm Password</label>
+            </div>
+
+            <button class="signup-btn" onclick="signup()">Sign Up</button>
+
+            <p class="login-text">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="signup-right">
+        <h1>Durga 💖</h1>
+        <p>
+            A safe platform where women express, grow, and inspire each other.
+        </p>
+        <img src="./Image/Image1.png">
+    </div>
+
+</div>
+<div id="toast" class="toast">Updated Successfully ✅</div>
+
+    <script>
+
+        function showToast(msg){
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.classList.add("show");
+
+            setTimeout(()=>{
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        function signup(){
+            const btn = document.querySelector(".signup-btn");
+
+            btn.classList.add("loader-btn");
+            btn.innerText = "";
+
+            const username = document.getElementById("username").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const dob = document.getElementById("dob").value;
+            const repassword = document.getElementById("repassword").value;
+
+            fetch("http://localhost:5000/signup", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({ username, phone, email, password, dob })
+            })
+            .then(res => res.json())
+            .then(data =>{
+                showToast(data.message);
+
+                setTimeout(()=>{
+                    window.location.href = "login.html";
+                },1000);
+            })
+            .catch(()=>{
+                showToast("Signup failed ❌");
+            })
+            .finally(()=>{
+                btn.classList.remove("loader-btn");
+                btn.innerText = "Sign Up";
+            });
+        } 
+    </script>
+</body>
+</html>

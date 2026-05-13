@@ -1,0 +1,97 @@
+<!-- notification.html — Bell + Dropdown UI only. Logic is in notification.js -->
+
+<div class="notification-container" id="notifContainer">
+
+    <!-- 🔔 Bell -->
+    <div class="notification-bell" id="notificationBell">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 01-3.46 0"/>
+        </svg>
+        <span class="notification-badge" id="notifCount">0</span>
+    </div>
+
+    <!-- 📩 Dropdown -->
+    <div class="notification-dropdown" id="notifDropdown">
+        <div class="notification-header">
+            🔔 Notifications
+            <span onclick="markAllAsRead()" class="mark-read">Mark all read</span>
+        </div>
+        <div class="notification-list" id="notifList">
+            <div class="notif-loading">Loading...</div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.notification-container { position: relative; }
+
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+    color: #2d1b4e;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: linear-gradient(135deg, #6938be, #d61ec1);
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-dropdown {
+    position: absolute;
+    right: 0;
+    top: 35px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.notification-header {
+    padding: 12px;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    color: #2d1b4e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mark-read {
+    font-size: 11px;
+    color: #6938be;
+    cursor: pointer;
+}
+
+.notification-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.notification-item:hover { background: #f9f5ff; }
+
+.notif-unread { background: #f9f5ff; }
+
+.notif-loading {
+    padding: 15px;
+    text-align: center;
+    color: #999;
+}
+</style>

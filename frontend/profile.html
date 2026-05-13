@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile ✨</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">← Back</button>
+
+<!-- ── COVER ── -->
+<div class="cover">
+    <img id="coverImg" src="https://via.placeholder.com/1200x320/1a0f2e/6938be?text=+" class="cover-img" loading="lazy">
+    <button class="change-cover" onclick="document.getElementById('coverInput').click()"></button>
+    <input type="file" id="coverInput" hidden accept="image/*">
+</div>
+
+<!-- ── PROFILE INFO ── -->
+<div class="profile-info">
+
+    <div class="profile-pic-wrap">
+        <img id="profilePic" src="https://via.placeholder.com/110/6938be/ffffff?text=U" class="profile-pic" loading="lazy"
+             onclick="document.getElementById('profileInput').click()">
+        <div class="pic-edit-badge" onclick="document.getElementById('profileInput').click()">✏️</div>
+        <input type="file" id="profileInput" hidden accept="image/*">
+    </div>
+
+    <h2 id="username">Username</h2>
+    <p id="email">email@example.com</p>
+    <p id="bio">No bio yet...</p>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div>
+            <strong id="postCount">0</strong>
+            <span>Posts</span>
+        </div>
+        <div>
+            <strong id="friendCount">0</strong>
+            <span>Friends</span>
+        </div>
+        <div>
+            <strong id="likeCount">0</strong>
+            <span>Likes</span>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <button class="edit-btn" onclick="openModal()">✏️ Edit Profile</button>
+    </div>
+
+</div>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+    <button class="active" onclick="showTab('posts', event)">📸 Posts</button>
+    <button onclick="showTab('about', event)">👤 About</button>
+</div>
+
+<!-- ── POSTS TAB ── -->
+<div id="posts" class="tab active">
+    <div id="myPosts" class="grid"></div>
+</div>
+
+<!-- ── ABOUT TAB ── -->
+<div id="about" class="tab">
+    <div class="about-card">
+        <div class="about-row">
+            <div class="about-icon">📞</div>
+            <div>
+                <div class="about-label">Phone</div>
+                <div class="about-value" id="phone">Not Added</div>
+            </div>
+        </div>
+        <div class="about-row">
+            <div class="about-icon">✅</div>
+            <div>
+                <div class="about-label">Account Status</div>
+                <div class="about-value" id="status">—</div>
+            </div>
+        </div>
+        <div class="about-row">
+            <div class="about-icon">🎂</div>
+            <div>
+                <div class="about-label">Date of Birth</div>
+                <div class="about-value" id="dob">—</div>
+            </div>
+        </div>
+        <div class="about-row">
+            <div class="about-icon">🌸</div>
+            <div>
+                <div class="about-label">Gender</div>
+                <div class="about-value" id="gender">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── EDIT MODAL ── -->
+<div id="modal" class="modal">
+    <div class="modal-box">
+        <h2>Edit Profile</h2>
+
+        <label>Name</label>
+        <input id="editName" placeholder="Enter your name">
+
+        <label>Bio</label>
+        <textarea id="editBio" placeholder="Write something about yourself..."></textarea>
+        <p id="charCount">0/100</p>
+
+        <div class="btn-group">
+            <button class="save-btn" onclick="saveProfile()">💾 Save</button>
+            <button class="close-btn" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ✅ Token ek jagah define karo - poori file mein use hoga
+const token  = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
+// ── TOAST ──
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+// ── TAB SWITCH ──
+function showTab(tab, e) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+    document.getElementById(tab).classList.add("active");
+    e.target.classList.add("active");
+}
+
+// ── MODAL ──
+function openModal() {
+    document.getElementById("modal").style.display = "flex";
+    document.getElementById("editName").value = document.getElementById("username").innerText;
+    document.getElementById("editBio").value  = document.getElementById("bio").innerText === "No bio yet..." ? "" : document.getElementById("bio").innerText;
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+document.getElementById("modal").addEventListener("click", function(e) {
+    if (e.target === this) closeModal();
+});
+
+// ── CHARACTER COUNT ──
+document.getElementById("editBio").addEventListener("input", () => {
+    const length = document.getElementById("editBio").value.length;
+    document.getElementById("charCount").innerText = length + "/100";
+    if (length > 100) document.getElementById("editBio").value = document.getElementById("editBio").value.substring(0, 100);
+});
+
+// ── SAVE PROFILE ── ✅ FIX: token added
+async function saveProfile() {
+    const name = document.getElementById("editName").value.trim();
+    const bio  = document.getElementById("editBio").value.trim();
+
+    if (!name) return showToast("Name khaali nahi ho sakta! ❌");
+
+    try {
+        const res = await fetch("http://localhost:5000/update-profile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`   // ✅ FIXED
+            },
+            body: JSON.stringify({ name, bio })       // userId server token se lega
+        });
+        await res.json();
+
+        // ✅ localStorage mein bhi username update karo
+        localStorage.setItem("username", name);
+
+        showToast("Profile Updated ✅");
+        loadUser();
+        closeModal();
+    } catch (err) {
+        showToast("Kuch gadbad ho gayi ❌");
+    }
+}
+
+// ── LOAD USER ──
+async function loadUser() {
+    const res  = await fetch(`http://localhost:5000/user/${userId}`);
+    const data = await res.json();
+
+    document.getElementById("username").innerText = data.username  || "User";
+    document.getElementById("email").innerText    = data.email     || "";
+    document.getElementById("bio").innerText      = data.bio       || "No bio yet...";
+    document.getElementById("phone").innerText    = data.phone     || "Not Added";
+    document.getElementById("status").innerText   = data.isActive  ? "Active ✅" : "Inactive ❌";
+    document.getElementById("gender").innerText   = data.gender    || "—";
+    document.getElementById("friendCount").innerText = (data.friends || []).length;
+
+    if (data.dob) {
+        document.getElementById("dob").innerText = new Date(data.dob)
+            .toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    if (data.profilePic) document.getElementById("profilePic").src = data.profilePic;
+    if (data.coverImage) document.getElementById("coverImg").src   = data.coverImage;
+}
+
+// ── LOAD POSTS ──
+async function loadMyPosts() {
+    const res  = await fetch(`http://localhost:5000/posts/user/${userId}`);
+    const data = await res.json();
+
+    document.getElementById("postCount").innerText = data.length;
+
+    const totalLikes = data.reduce((sum, post) => sum + (post.likes?.length || 0), 0);
+    document.getElementById("likeCount").innerText = totalLikes;
+
+    const container = document.getElementById("myPosts");
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-posts">
+                <div class="emoji">📸</div>
+                <p>No posts yet — share your first moment!</p>
+            </div>
+        `;
+        return;
+    }
+
+    data.forEach(post => {
+        const div = document.createElement("div");
+        div.classList.add("post");
+        div.innerHTML = `
+            <img src="${post.mediaUrl || 'https://via.placeholder.com/300/6938be/ffffff?text=Post'}" loading="lazy">
+            <div class="overlay">
+                ❤️ ${post.likes?.length || 0}
+                &nbsp;&nbsp;
+                💬 ${post.comments?.length || 0}
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ── PROFILE PIC UPLOAD ── ✅ FIX: token added
+document.getElementById("profileInput").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    document.getElementById("profilePic").src = URL.createObjectURL(file);
+
+    const formData = new FormData();
+    formData.append("profilePic", file);
+
+    try {
+        const res  = await fetch(`http://localhost:5000/upload-profile/${userId}`, {
+            method: "POST",
+            body: formData,
+            headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED
+        });
+        const data = await res.json();
+        document.getElementById("profilePic").src = data.imagePath;
+        showToast("Profile pic update ho gayi! ✅");
+    } catch (err) {
+        showToast("Upload fail ho gayi ❌");
+    }
+});
+
+// ── COVER UPLOAD ── ✅ FIX: token added
+document.getElementById("coverInput").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    document.getElementById("coverImg").src = URL.createObjectURL(file);
+
+    const formData = new FormData();
+    formData.append("cover", file);
+
+    try {
+        const res  = await fetch(`http://localhost:5000/upload-cover/${userId}`, {
+            method: "POST",
+            body: formData,
+            headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED
+        });
+        const data = await res.json();
+        document.getElementById("coverImg").src = data.imagePath;
+        showToast("Cover update ho gayi! ✅");
+    } catch (err) {
+        showToast("Upload fail ho gayi ❌");
+    }
+});
+
+// ── INIT ──
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!userId) {
+        window.location.href = "login.html";
+        return;
+    }
+    await Promise.all([loadUser(), loadMyPosts()]);
+});
+</script>
+</body>
+</html>

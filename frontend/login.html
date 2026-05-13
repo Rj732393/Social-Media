@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main">
+
+    <div class="login-container">
+
+        <!-- LEFT (FORM) -->
+        <div class="login-left">
+
+            <div class="form-box">
+
+                <h2>Welcome Back 💖</h2>
+                <p class="subtitle">Login to continue your journey</p>
+
+                <!-- INPUT -->
+                <div class="input-group">
+                    <input id="loginInput" required>
+                    <label>Email or Phone</label>
+                </div>
+
+                <div class="input-group">
+                    <input id="loginPassword" type="password" required>
+                    <label>Password</label>
+                </div>
+
+                <!-- BUTTON -->
+                <button class="login-btn" onclick="login()">Login</button>
+
+                <!-- SWITCH -->
+                <p class="login-text">
+                    Don't have an account?
+                    <a href="signup.html">Create one</a>
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT (BRAND) -->
+        <div class="login-right">
+
+            <h1>Durga 💖</h1>
+
+            <p>
+                A safe space for women to shine, connect, and grow together.
+                Share your achievements, inspire others, and build your identity.
+            </p>
+
+            <img src="./Image/Image1.png" alt="Women Empowerment">
+
+        </div>
+
+    </div>
+
+</div>
+<div id="toast" class="toast">Updated Successfully ✅</div>
+
+    <script>
+        function showToast(msg){
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.classList.add("show");
+            setTimeout(()=>{
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        function login(){
+            const input    = document.getElementById("loginInput").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const btn      = document.querySelector(".login-btn");
+
+            if(!input || !password){
+                return showToast("Email/Phone aur password dono zaroori hain ❌");
+            }
+
+            // 🔥 START LOADER
+            btn.classList.add("loader-btn");
+            btn.innerText = "";
+
+            fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({ input, password })
+            })
+            .then(async res => {
+                const data = await res.json();
+
+                if(!res.ok){
+                    showToast(data.message);
+                    throw new Error("Login failed");
+                }
+
+                showToast(data.message);
+
+                // ✅ FIX: username bhi save karo (comments aur homepage mein kaam aayega)
+                localStorage.setItem("token",    data.token);
+                localStorage.setItem("userId",   data.userId);
+                localStorage.setItem("username", data.username);
+                localStorage.setItem("isActive", data.isActive ? "true" : "false");
+
+                setTimeout(()=>{
+                    window.location.href = "homepage.html";
+                }, 1000);
+            })
+            .catch(err=>{
+                console.log(err);
+                showToast("Kuch galat ho gaya ❌");
+            })
+            .finally(()=>{
+                // 🔥 STOP LOADER
+                btn.classList.remove("loader-btn");
+                btn.innerText = "Login";
+            });
+        }
+
+        document.addEventListener("keypress", function(e){
+            if(e.key === "Enter") login();
+        });
+    </script>
+</body>
+</html>

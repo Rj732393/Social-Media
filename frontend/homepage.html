@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+
+<!-- TOP BAR (mobile) -->
+<div class="top-bar">
+    <button onclick="toggleMenu()">☰</button>
+    <h2>Durga</h2>
+</div>
+
+<div class="main-container">
+
+    <!-- LEFT MENU -->
+    <div class="left" id="leftSidebar">
+        <h2 class="logo">
+            <span class="logo-icon">✦</span>
+            <span class="logo-text">Durga</span>
+        </h2>
+        <ul class="menu">
+            <li>
+                <a href="homepage.html" class="active">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+                    </span>
+                    <span class="nav-label">Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+                    </span>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="friends.html">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4"/><circle cx="19" cy="11" r="3"/><path d="M21 21v-1a3 3 0 00-3-3h-1"/></svg>
+                    </span>
+                    <span class="nav-label">Friends</span>
+                </a>
+            </li>
+            <li>
+                <a href="chat.html" id="chatNavLink">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </span>
+                    <span class="nav-label">Messages</span>
+                </a>
+            </li>
+            <li>
+                <a href="explore.html">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    </span>
+                    <span class="nav-label">Explore</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                    </span>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </li>
+        </ul>
+        <button onclick="logout()" class="logout-btn">
+            <span class="nav-icon">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </span>
+            <span class="nav-label">Logout</span>
+        </button>
+    </div>
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- CREATE POST -->
+        <div class="create-post">
+            <textarea id="caption" placeholder="What's on your mind?"></textarea>
+
+            <!-- Media Preview Area -->
+            <div id="mediaPreviewGrid" class="media-preview-grid" style="display:none;"></div>
+
+            <!-- Bottom toolbar -->
+            <div class="create-post-toolbar">
+                <input id="mediaFile" type="file" accept="image/*,video/*" multiple style="display:none;" onchange="handleFileSelect(this)">
+
+                <div class="toolbar-actions">
+                    <button type="button" class="toolbar-btn" onclick="document.getElementById('mediaFile').click()" title="Photo/Video">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <span>Photo/Video</span>
+                    </button>
+
+                    <button type="button" class="toolbar-btn" onclick="toggleLocationInput()" title="Location" id="locationToggleBtn">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                        <span>Location</span>
+                    </button>
+
+                    <button type="button" class="toolbar-btn" onclick="toggleFeeling()" title="Feeling">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                        <span>Feeling</span>
+                    </button>
+                </div>
+
+                <button onclick="createPost()" class="post-submit-btn">Post</button>
+            </div>
+
+            <!-- Location input -->
+            <div id="locationRow" style="display:none; margin-top:8px;">
+                <div style="position:relative;">
+                    <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9b7cb8;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                    <input type="text" id="locationInput" placeholder="Add location..." class="location-input" style="width:100%;padding:9px 12px 9px 34px;border:1px solid #f3e8ff;border-radius:20px;font-family:'Poppins',sans-serif;font-size:13px;background:#f9f0ff;outline:none;color:#2d1b4e;">
+                </div>
+            </div>
+
+            <!-- Feeling picker -->
+            <div id="feelingRow" style="display:none; margin-top:8px;">
+                <div class="feeling-options">
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😊 Happy')">😊 Happy</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😢 Sad')">😢 Sad</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😍 Loved')">😍 Loved</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😎 Cool')">😎 Cool</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'🥳 Excited')">🥳 Excited</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😤 Angry')">😤 Angry</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'😴 Tired')">😴 Tired</span>
+                    <span class="feeling-chip" onclick="selectFeeling(this,'🤒 Sick')">🤒 Sick</span>
+                </div>
+            </div>
+
+            <!-- Selected feeling tag -->
+            <div id="selectedFeelingTag" style="display:none; margin-top:8px;"></div>
+        </div>
+
+        <!-- FEED -->
+        <div class="feed">
+            <h3>Feed 📝</h3>
+            <div id="feed"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT PROFILE CARD -->
+    <div class="right">
+        <div class="profile-card">
+
+            <!-- ✅ Notification bell inject hoga yahan -->
+            <div id="notif-area"></div>
+
+            <!-- HEADER -->
+            <div class="profile-header" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <img id="profilePic" src="https://via.placeholder.com/50">
+                <h3 id="username">Loading...</h3>
+            </div>
+
+            <!-- INFO -->
+            <div class="profile-info">
+                <div class="info-row">
+                    <span>Email</span>
+                    <span id="email">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span>Phone</span>
+                    <span id="phone">Not Added</span>
+                </div>
+                <div class="info-row">
+                    <span>Status</span>
+                    <span id="status" class="status">Inactive</span>
+                </div>
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="progress-box">
+                <p>Profile Completion</p>
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <span id="progressText">0% Complete</span>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div id="toast" class="toast">Updated Successfully ✅</div>
+
+<!-- ✅ FIX: notification.js pehle load karo taaki functions available hon -->
+<script src="notification.js"></script>
+
+<script>
+
+
+
+
+
+// ── TOAST ──
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+// ── LOAD USER ──
+function loadUser() {
+    const userId = localStorage.getItem("userId");
+    fetch(`http://localhost:5000/user/${userId}`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("username").innerText = data.username || "N/A";
+        document.getElementById("email").innerText    = data.email    || "N/A";
+
+        if (data.profilePic) document.getElementById("profilePic").src = data.profilePic;
+
+        if (data.isActive === true) {
+            document.getElementById("status").innerText = "Active ✅";
+            localStorage.setItem("isActive", "true");
+        } else {
+            document.getElementById("status").innerText = "Inactive ❌";
+            localStorage.setItem("isActive", "false");
+        }
+
+        document.getElementById("phone").innerHTML = data.phone ? "Verified ✅" : "Not Added ❌";
+
+        // Profile completion progress
+        let filled = 0;
+        if (data.username)   filled++;
+        if (data.email)      filled++;
+        if (data.phone)      filled++;
+        if (data.bio)        filled++;
+        if (data.profilePic) filled++;
+        const pct = Math.round((filled / 5) * 100);
+        document.getElementById("progressBar").style.width = pct + "%";
+        document.getElementById("progressText").innerText  = pct + "% Complete";
+    })
+    .catch(err => console.error("Error loading user:", err));
+}
+
+// ── LOAD POSTS (Feed) ──
+function loadPosts() {
+    const currentUserId = localStorage.getItem("userId");
+    fetch("http://localhost:5000/posts")
+    .then(res => res.json())
+    .then(data => {
+        const feed = document.getElementById("feed");
+        feed.innerHTML = data.map(post => {
+            const isLiked = post.likes && post.likes.includes(currentUserId);
+            const isVideo = post.mediaUrl && post.mediaUrl.match(/\.(mp4|webm|mov|ogg)$/i);
+            return `
+            <div class="post">
+                <h4>👤 ${post.username || "User"}</h4>
+                <p>${post.caption || ""}</p>
+                ${post.mediaUrl
+                    ? (isVideo
+                        ? `<video src="${post.mediaUrl}" controls width="100%" style="border-radius:8px; max-height:400px;"></video>`
+                        : `<img src="${post.mediaUrl}" width="100%" style="border-radius:8px;" loading="lazy"/>`)
+                    : ""}
+                <p>❤️ <span id="like-count-feed-${post._id}">${post.likes ? post.likes.length : 0}</span></p>
+                <button id="like-btn-feed-${post._id}" onclick="likePost('${post._id}')"
+                    style="color:${isLiked ? 'red' : 'black'}; font-weight:${isLiked ? 'bold' : 'normal'}; cursor:pointer;">
+                    ${isLiked ? '❤️ Liked' : '🤍 Like'}
+                </button>
+                <br><br>
+                <input type="text" id="comment-feed-${post._id}" placeholder="Comment here....">
+                <button onclick="addComment('${post._id}')">Comment</button>
+                <div class="comments-list">
+                    ${(post.comments || []).map(c => `<p>💬 <strong>${c.username || 'User'}</strong>: ${c.text}</p>`).join("")}
+                </div>
+            </div>`;
+        }).join("");
+    });
+}
+
+// ── LIKE ──
+function likePost(id) {
+    const token = localStorage.getItem("token");
+    fetch(`http://localhost:5000/posts/${id}/like`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then(() => loadPosts())
+    .catch(err => console.error("Like error:", err));
+}
+
+// ── COMMENT ──
+function addComment(id) {
+    const input    = document.getElementById(`comment-feed-${id}`);
+    const text     = input.value.trim();
+    const isActive = localStorage.getItem("isActive");
+    const username = localStorage.getItem("username") || "User";
+    const token    = localStorage.getItem("token");
+
+    if (!text) return;
+    if (isActive !== "true") { alert("Wait for admin approval ❌"); return; }
+
+    fetch(`http://localhost:5000/posts/${id}/comment`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ text, username })
+    })
+    .then(() => {
+        showToast("Comment add hua ✅");
+        input.value = "";
+        loadPosts();
+    });
+}
+
+let selectedFeeling = "";
+
+function handleFileSelect(input) {
+    const grid = document.getElementById("mediaPreviewGrid");
+    grid.innerHTML = "";
+    const files = Array.from(input.files);
+    if (files.length === 0) { grid.style.display = "none"; return; }
+
+    grid.style.display = "grid";
+    files.forEach((file, i) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "preview-item";
+        wrapper.style.cssText = "position:relative;border-radius:12px;overflow:hidden;background:#f0e6ff;";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.innerHTML = "✕";
+        removeBtn.type = "button";
+        removeBtn.style.cssText = "position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;z-index:2;padding:0;";
+        removeBtn.onclick = () => removeFile(i, input);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const isVideo = file.type.startsWith("video/");
+            const el = document.createElement(isVideo ? "video" : "img");
+            el.src = e.target.result;
+            el.style.cssText = "width:100%;height:120px;object-fit:cover;display:block;";
+            if (isVideo) { el.muted = true; el.autoplay = false; }
+            wrapper.appendChild(el);
+        };
+        reader.readAsDataURL(file);
+
+        wrapper.appendChild(removeBtn);
+        grid.appendChild(wrapper);
+    });
+}
+
+function removeFile(index, input) {
+    const dt = new DataTransfer();
+    Array.from(input.files).forEach((f, i) => { if (i !== index) dt.items.add(f); });
+    input.files = dt.files;
+    handleFileSelect(input);
+}
+
+function toggleLocationInput() {
+    const row = document.getElementById("locationRow");
+    const btn = document.getElementById("locationToggleBtn");
+    const visible = row.style.display !== "none";
+    row.style.display = visible ? "none" : "block";
+    btn.style.color = visible ? "" : "#6938be";
+    if (!visible) document.getElementById("locationInput").focus();
+}
+
+function toggleFeeling() {
+    const row = document.getElementById("feelingRow");
+    row.style.display = row.style.display === "none" ? "block" : "none";
+}
+
+function selectFeeling(el, feeling) {
+    selectedFeeling = feeling;
+    document.querySelectorAll(".feeling-chip").forEach(c => c.classList.remove("selected"));
+    el.classList.add("selected");
+    document.getElementById("feelingRow").style.display = "none";
+    const tag = document.getElementById("selectedFeelingTag");
+    tag.style.display = "flex";
+    tag.innerHTML = `<span style="background:#f3e8ff;color:#6938be;padding:4px 12px;border-radius:20px;font-size:13px;display:flex;align-items:center;gap:6px;">${feeling} <span onclick="removeFeeling()" style="cursor:pointer;font-size:11px;opacity:0.7;">✕</span></span>`;
+}
+
+function removeFeeling() {
+    selectedFeeling = "";
+    document.getElementById("selectedFeelingTag").style.display = "none";
+}
+
+// ── CREATE POST ──
+async function createPost() {
+    const captionRaw = document.getElementById("caption").value.trim();
+    const locationEl = document.getElementById("locationInput");
+    const location   = locationEl ? locationEl.value.trim() : "";
+    const fileInput  = document.getElementById("mediaFile");
+    const isActive   = localStorage.getItem("isActive");
+    const btn        = document.querySelector(".post-submit-btn");
+    const token      = localStorage.getItem("token");
+
+    if (isActive !== "true") { alert("Your account is not approved yet ❌"); return; }
+    if (!captionRaw && fileInput.files.length === 0) { showToast("Kuch likho ya photo dalo ❌"); return; }
+
+    let caption = captionRaw;
+    if (selectedFeeling) caption += `  —  feeling ${selectedFeeling}`;
+    if (location)        caption += `\n📍 ${location}`;
+
+    btn.innerText = "Uploading...";
+    btn.disabled  = true;
+
+    try {
+        const files = Array.from(fileInput.files);
+        if (files.length === 0) {
+            const formData = new FormData();
+            formData.append("caption", caption);
+            await fetch("http://localhost:5000/posts", {
+                method: "POST",
+                body: formData,
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+        } else {
+            // ✅ FIX: token added in loop for each file upload
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append("caption", i === 0 ? caption : "");
+                formData.append("media", files[i]);
+                await fetch("http://localhost:5000/posts", {
+                    method: "POST",
+                    body: formData,
+                    headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED
+                });
+            }
+        }
+
+        showToast("Post ho gayi! ✅");
+        document.getElementById("caption").value = "";
+        fileInput.value = "";
+        document.getElementById("mediaPreviewGrid").style.display = "none";
+        document.getElementById("mediaPreviewGrid").innerHTML = "";
+        if (locationEl) locationEl.value = "";
+        document.getElementById("locationRow").style.display = "none";
+        removeFeeling();
+        loadPosts();
+    } catch (err) {
+        console.error("Upload Error:", err);
+        alert("Upload fail ho gaya!");
+    } finally {
+        btn.innerText = "Post";
+        btn.disabled  = false;
+    }
+}
+
+// ── SIDEBAR TOGGLE (mobile) ──
+function toggleMenu() {
+    document.getElementById("leftSidebar").classList.toggle("active");
+}
+
+// ── LOGOUT ──
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+    localStorage.removeItem("isActive");
+    window.location.href = "login.html";
+}
+
+// ── NAV MESSAGE BADGE ──
+async function updateNavMsgBadge() {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+    try {
+        const res  = await fetch(`http://localhost:5000/unread-count/${userId}`);
+        const data = await res.json();
+
+        const chatLink = document.getElementById("chatNavLink");
+        if (!chatLink) return;
+
+        let badge = document.getElementById("navMsgBadge");
+        if (!badge) {
+            badge = document.createElement("span");
+            badge.id = "navMsgBadge";
+            badge.style.cssText = `
+                background: linear-gradient(135deg,#6938be,#d61ec1);
+                color:white; font-size:10px; font-weight:700;
+                min-width:18px; height:18px; border-radius:50%;
+                display:inline-flex; align-items:center;
+                justify-content:center; margin-left:6px;
+                vertical-align:middle;
+            `;
+            chatLink.appendChild(badge);
+        }
+
+        const count = data.count || 0;
+        badge.textContent   = count;
+        badge.style.display = count > 0 ? "inline-flex" : "none";
+    } catch (err) {
+        // Silent fail
+    }
+}
+
+// ── INIT ──
+document.addEventListener("DOMContentLoaded", () => {
+    // ✅ Auth check
+    if (!localStorage.getItem("userId")) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    loadUser();
+    loadPosts();
+    updateNavMsgBadge();
+    setInterval(updateNavMsgBadge, 10000);
+
+    // ✅ FIX: notification.html SIRF EK BAAR fetch karo
+    // Script execute nahi hota innerHTML se, isliye notification.js alag load ki hai (upar)
+    fetch("notification.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("notif-area").innerHTML = html;
+            // ✅ Ab DOM mein bell hai — bell listeners init karo
+            initNotificationBell();
+        });
+});
+
+// Outside click → close dropdown
+document.addEventListener("click", function(e) {
+    const container = document.getElementById("notifContainer");
+    if (container && !container.contains(e.target)) {
+        const dd = document.getElementById("notifDropdown");
+        if (dd) dd.style.display = "none";
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages ✨</title>
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">← Back</button>
+<div class="chat-container">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel" id="leftPanel">
+        <div class="left-header">
+            <div class="left-header-top">
+                <h2>✨ Messages</h2>
+            </div>
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchUser" placeholder="Search people...">
+            </div>
+        </div>
+        <div id="usersList"></div>
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel" id="rightPanel">
+        <div class="no-chat">
+            <div class="no-chat-emoji">💌</div>
+            <h3>Your Messages</h3>
+            <p>Select someone from the list and start a conversation!</p>
+            <div class="no-chat-decoration">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>

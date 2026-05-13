@@ -1,0 +1,102 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+/* GRID LAYOUT */
+.user-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* CARD */
+.user-card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+    transform: translateY(30px);
+    opacity: 0;
+
+    animation: fadeSlide 0.5s ease forwards;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* TEXT */
+.username {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.email {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+/* STATUS */
+.status {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.active {
+    color: #22c55e;
+}
+
+.inactive {
+    color: #ef4444;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* BUTTON */
+.btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+ 
+/* BUTTON COLORS */
+.activate {
+    background: #22c55e;
+}
+
+.deactivate {
+    background: #facc15;
+}
+
+.delete {
+    background: #ef4444;
+}
+
+/* HOVER EFFECT 🔥 */
+.btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}

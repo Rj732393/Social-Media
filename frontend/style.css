@@ -1,0 +1,41 @@
+/* 📱 MOBILE VIEW */
+@media (max-width: 768px) {
+
+    /* MAIN LAYOUT */
+    .main-container {
+        flex-direction: column;
+    }
+
+    /* LEFT SIDEBAR */
+    .left {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    /* CENTER */
+    .center {
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+    }
+
+    /* RIGHT SIDEBAR */
+    .right {
+        width: 100%;
+        position: relative;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    /* PROFILE CARD */
+    .profile-card {
+        max-width: 100%;
+    }
+
+    /* IMAGES */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
