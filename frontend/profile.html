@@ -170,7 +170,7 @@ async function saveProfile() {
     if (!name) return showToast("Name khaali nahi ho sakta! ❌");
 
     try {
-        const res = await fetch("http://localhost:5000/update-profile", {
+        const res = await fetch("https://social-media-8im4.onrender.com/update-profile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -193,7 +193,7 @@ async function saveProfile() {
 
 // ── LOAD USER ──
 async function loadUser() {
-    const res  = await fetch(`http://localhost:5000/user/${userId}`);
+    const res  = await fetch(`https://social-media-8im4.onrender.com/user/${userId}`);
     const data = await res.json();
 
     document.getElementById("username").innerText = data.username  || "User";
@@ -215,7 +215,7 @@ async function loadUser() {
 
 // ── LOAD POSTS ──
 async function loadMyPosts() {
-    const res  = await fetch(`http://localhost:5000/posts/user/${userId}`);
+    const res  = await fetch(`https://social-media-8im4.onrender.com/posts/user/${userId}`);
     const data = await res.json();
 
     document.getElementById("postCount").innerText = data.length;
@@ -262,7 +262,7 @@ document.getElementById("profileInput").addEventListener("change", async (e) => 
     formData.append("profilePic", file);
 
     try {
-        const res  = await fetch(`http://localhost:5000/upload-profile/${userId}`, {
+        const res  = await fetch(`https://social-media-8im4.onrender.com/upload-profile/${userId}`, {
             method: "POST",
             body: formData,
             headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED
@@ -286,7 +286,7 @@ document.getElementById("coverInput").addEventListener("change", async (e) => {
     formData.append("cover", file);
 
     try {
-        const res  = await fetch(`http://localhost:5000/upload-cover/${userId}`, {
+        const res  = await fetch(`https://social-media-8im4.onrender.com/upload-cover/${userId}`, {
             method: "POST",
             body: formData,
             headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED

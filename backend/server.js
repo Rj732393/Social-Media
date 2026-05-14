@@ -153,7 +153,7 @@ app.post("/posts", authMiddleware, upload.single("media"), async (req, res) => {
     try {
         const { caption } = req.body;
         const userId = req.userId; // ✅ token se lo, body se nahi
-        let mediaUrl = req.file ? `${process.env.BASE_URL || "http://localhost:5000"}/uploads/${req.file.filename}` : "";
+        let mediaUrl = req.file ? `${process.env.BASE_URL || "https://social-media-8im4.onrender.com"}/uploads/${req.file.filename}` : "";
 
         const newPost = new Post({ userId, caption, mediaUrl, likes: [], comments: [] });
         await newPost.save();
@@ -266,14 +266,14 @@ app.get("/posts/user/:userId", async (req, res) => {
 
 app.post("/upload-profile/:userId", authMiddleware, upload.single("profilePic"), async (req, res) => {
     if (!req.file) return res.status(400).send("File toh daalo bhai");
-    const imagePath = `${process.env.BASE_URL || "http://localhost:5000"}/uploads/${req.file.filename}`;
+    const imagePath = `${process.env.BASE_URL || "https://social-media-8im4.onrender.com"}/uploads/${req.file.filename}`;
     await User.findByIdAndUpdate(req.params.userId, { profilePic: imagePath });
     res.json({ imagePath });
 });
 
 app.post("/upload-cover/:userId", authMiddleware, upload.single("cover"), async (req, res) => {
     if (!req.file) return res.status(400).send("No file");
-    const imagePath = `${process.env.BASE_URL || "http://localhost:5000"}/uploads/${req.file.filename}`;
+    const imagePath = `${process.env.BASE_URL || "https://social-media-8im4.onrender.com"}/uploads/${req.file.filename}`;
     await User.findByIdAndUpdate(req.params.userId, { coverImage: imagePath });
     res.json({ imagePath });
 });

@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5000");
+const socket = io("https://social-media-8im4.onrender.com");
 const myId   = localStorage.getItem("userId");
 const unreadCounts = {};
 if (!myId) window.location.href = "login.html";
@@ -40,7 +40,7 @@ function updateNavMessageBadge(count) {
 
 // ── FETCH ALL USERS ──
 async function fetchUsers() {
-    const res  = await fetch(`http://localhost:5000/chat-users/${myId}`);
+    const res  = await fetch(`https://social-media-8im4.onrender.com/chat-users/${myId}`);
     allUsers   = await res.json();
     displayUsers(allUsers);
 }
@@ -143,7 +143,7 @@ async function openChat(user) {
 
 // ── LOAD MESSAGES ──
 async function loadMessages() {
-    const res      = await fetch(`http://localhost:5000/messages/${myId}/${activeReceiverId}`);
+    const res      = await fetch(`https://social-media-8im4.onrender.com/messages/${myId}/${activeReceiverId}`);
     const messages = await res.json();
     const area     = document.getElementById("messagesArea");
     area.innerHTML = "";
@@ -207,7 +207,7 @@ async function sendMessage() {
     input.value = "";
 
     const token = localStorage.getItem("token"); // ✅ token lo
-    await fetch("http://localhost:5000/message", {
+    await fetch("https://social-media-8im4.onrender.com/message", {
         method: "POST",
         headers: { 
             "Content-Type": "application/json",

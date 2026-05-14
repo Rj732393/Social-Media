@@ -65,9 +65,9 @@ function showToast(msg) {
 async function loadAllData() {
     try {
         const [resFriends, resReceived, resSent] = await Promise.all([
-            fetch(`http://localhost:5000/friends/${userId}`),
-            fetch(`http://localhost:5000/requests/received/${userId}`),
-            fetch(`http://localhost:5000/requests/${userId}`)
+            fetch(`https://social-media-8im4.onrender.com/friends/${userId}`),
+            fetch(`https://social-media-8im4.onrender.com/requests/received/${userId}`),
+            fetch(`https://social-media-8im4.onrender.com/requests/${userId}`)
         ]);
 
         const friends  = await resFriends.json();
@@ -175,7 +175,7 @@ async function handleRequest(requestId, action, btn) {
     const endpoint = action === 'accept' ? 'accept-request' : 'reject-request';
 
     try {
-        const res = await fetch(`http://localhost:5000/${endpoint}`, {
+        const res = await fetch(`https://social-media-8im4.onrender.com/${endpoint}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -203,7 +203,7 @@ async function unfriend(friendId) {
     if (!confirm("Pakka unfriend karna hai? 💔")) return;
 
     try {
-        const res = await fetch("http://localhost:5000/unfriend", {
+        const res = await fetch("https://social-media-8im4.onrender.com/unfriend", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

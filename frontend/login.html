@@ -86,7 +86,7 @@
             btn.classList.add("loader-btn");
             btn.innerText = "";
 
-            fetch("http://localhost:5000/login", {
+            fetch("https://social-media-8im4.onrender.com/login", {
                 method: "POST",
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({ input, password })

@@ -116,11 +116,11 @@ function showTab(tab, e) {
 
 // ── DYNAMIC BUTTONS ──
 async function loadButtons() {
-    const resFriends  = await fetch(`http://localhost:5000/friends/${myId}`);
+    const resFriends  = await fetch(`https://social-media-8im4.onrender.com/friends/${myId}`);
     const friends     = await resFriends.json();
     const isFriend    = friends.some(f => f._id === friendId);
 
-    const resRequests = await fetch(`http://localhost:5000/all-requests/${myId}`);
+    const resRequests = await fetch(`https://social-media-8im4.onrender.com/all-requests/${myId}`);
     const requests    = await resRequests.json();
     const rel         = requests.find(r =>
         (r.sender?._id === friendId || r.receiver?._id === friendId) ||
@@ -155,7 +155,7 @@ async function loadButtons() {
 
 // ── LOAD USER DATA ──
 async function loadFriend() {
-    const res  = await fetch(`http://localhost:5000/user/${friendId}`);
+    const res  = await fetch(`https://social-media-8im4.onrender.com/user/${friendId}`);
     const data = await res.json();
 
     document.getElementById("username").innerText = data.username || "User";
@@ -179,7 +179,7 @@ async function loadFriend() {
 
 // ── LOAD POSTS ──
 async function loadPosts() {
-    const res  = await fetch(`http://localhost:5000/posts/user/${friendId}`);
+    const res  = await fetch(`https://social-media-8im4.onrender.com/posts/user/${friendId}`);
     const data = await res.json();
 
     document.getElementById("postCount").innerText = data.length;
@@ -216,7 +216,7 @@ async function loadPosts() {
 // ── SEND REQUEST ── ✅ FIX: token added, senderId removed from body
 async function sendRequest() {
     try {
-        const res  = await fetch("http://localhost:5000/send-request", {
+        const res  = await fetch("https://social-media-8im4.onrender.com/send-request", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -234,7 +234,7 @@ async function sendRequest() {
 
 // ── ACCEPT REQUEST ──
 async function acceptRequest(requestId) {
-    const res  = await fetch("http://localhost:5000/accept-request", {
+    const res  = await fetch("https://social-media-8im4.onrender.com/accept-request", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -255,7 +255,7 @@ function goToChat() {
 // ── UNFRIEND ──
 async function unfriend() {
     if (!confirm("Pakka unfriend karna hai? 💔")) return;
-    const res  = await fetch("http://localhost:5000/unfriend", {
+    const res  = await fetch("https://social-media-8im4.onrender.com/unfriend", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -271,7 +271,7 @@ async function unfriend() {
 // ── BLOCK ──
 async function blockUser() {
     if (!confirm("Is user ko block karna hai? 🚫")) return;
-    const res  = await fetch("http://localhost:5000/block-user", {
+    const res  = await fetch("https://social-media-8im4.onrender.com/block-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ myId, blockId: friendId })

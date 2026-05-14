@@ -14,7 +14,7 @@ if (!localStorage.getItem("userId")) {
 async function fetchFriends() {
     try {
         const userId = localStorage.getItem("userId");
-        const res    = await fetch(`http://localhost:5000/friends/${userId}`);
+        const res    = await fetch(`https://social-media-8im4.onrender.com/friends/${userId}`);
         myFriends    = await res.json();
     } catch (err) {
         console.error("Doston ki list nahi mil rahi:", err);
@@ -26,7 +26,7 @@ async function fetchFriends() {
 async function fetchAllRequests() {
     try {
         const userId      = localStorage.getItem("userId");
-        const res         = await fetch(`http://localhost:5000/all-requests/${userId}`);
+        const res         = await fetch(`https://social-media-8im4.onrender.com/all-requests/${userId}`);
         allMyRequests     = await res.json();
     } catch (err) {
         console.error("Requests fetch karne mein dikkat hui:", err);
@@ -38,7 +38,7 @@ async function fetchAllRequests() {
 async function fetchUsers() {
     try {
         const userId = localStorage.getItem("userId");
-        const res    = await fetch(`http://localhost:5000/users/${userId}`);
+        const res    = await fetch(`https://social-media-8im4.onrender.com/users/${userId}`);
         const users  = await res.json();
 
         if (Array.isArray(users)) {
@@ -129,7 +129,7 @@ function displayUsers(users) {
 async function sendRequest(receiverId, btn) {
     try {
         const token = localStorage.getItem("token");
-        const res   = await fetch("http://localhost:5000/send-request", {
+        const res   = await fetch("https://social-media-8im4.onrender.com/send-request", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -161,7 +161,7 @@ async function unfriend(friendId) {
     if (!confirm("Pakka unfriend karna hai? 💔")) return;
     try {
         const token = localStorage.getItem("token");
-        const res   = await fetch("http://localhost:5000/unfriend", {
+        const res   = await fetch("https://social-media-8im4.onrender.com/unfriend", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -185,7 +185,7 @@ async function blockUser(blockId) {
     if (!confirm("Is user ko block karna hai? 🚫")) return;
     try {
         const myId = localStorage.getItem("userId");
-        const res  = await fetch("http://localhost:5000/block-user", {
+        const res  = await fetch("https://social-media-8im4.onrender.com/block-user", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ myId, blockId })

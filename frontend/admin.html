@@ -18,7 +18,7 @@ function loadUsers() {
 
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5000/admin/users", {
+    fetch("https://social-media-8im4.onrender.com/admin/users", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -99,7 +99,7 @@ function loadUsers() {
 
 
 function activate(id) {
-    fetch(`http://localhost:5000/admin/activate/${id}`, { method: "POST" })
+    fetch(`https://social-media-8im4.onrender.com/admin/activate/${id}`, { method: "POST" })
     .then(res => res.json())
     .then(data => {
         alert(data.message || "User Activated"); 
@@ -109,7 +109,7 @@ function activate(id) {
 }
 
 function deactivate(id) {
-    fetch(`http://localhost:5000/admin/deactivate/${id}`, { method: "POST" })
+    fetch(`https://social-media-8im4.onrender.com/admin/deactivate/${id}`, { method: "POST" })
     .then(res => res.json())
     .then(data => {
         alert(data.message || "User Deactivated");
@@ -121,7 +121,7 @@ function deactivate(id) {
 function deleteUser(id) {
     if(!confirm("Are you sure you want to delete this user?")) return;
 
-    fetch(`http://localhost:5000/admin/delete/${id}`, { method: "DELETE" })
+    fetch(`https://social-media-8im4.onrender.com/admin/delete/${id}`, { method: "DELETE" })
     .then(res => res.json())
     .then(data => {
         alert(data.message || "User Deleted");

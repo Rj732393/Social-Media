@@ -97,7 +97,7 @@
             const dob = document.getElementById("dob").value;
             const repassword = document.getElementById("repassword").value;
 
-            fetch("http://localhost:5000/signup", {
+            fetch("https://social-media-8im4.onrender.com/signup", {
                 method: "POST",
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({ username, phone, email, password, dob })

@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="homepage.css">
 </head>
 <body>
-
+ 
 <!-- TOP BAR (mobile) -->
 <div class="top-bar">
     <button onclick="toggleMenu()">☰</button>
     <h2>Durga</h2>
 </div>
-
+ 
 <div class="main-container">
-
+ 
     <!-- LEFT MENU -->
     <div class="left" id="leftSidebar">
         <h2 class="logo">
@@ -78,48 +79,58 @@
             <span class="nav-label">Logout</span>
         </button>
     </div>
-
+ 
     <!-- CENTER -->
     <div class="center">
+ 
         <!-- CREATE POST -->
         <div class="create-post">
-            <textarea id="caption" placeholder="What's on your mind?"></textarea>
-
+ 
+            <!-- Avatar + hint row -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <img id="createPostAvatar" src="https://via.placeholder.com/38"
+                     style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid transparent;background:linear-gradient(white,white) padding-box,linear-gradient(135deg,#6938be,#d61ec1) border-box;">
+                <span style="font-size:13px;color:#c4a8d8;font-weight:500;">What's on your mind?</span>
+            </div>
+ 
+            <textarea id="caption" placeholder="Share something with your community..."></textarea>
+ 
             <!-- Media Preview Area -->
             <div id="mediaPreviewGrid" class="media-preview-grid" style="display:none;"></div>
-
+ 
             <!-- Bottom toolbar -->
             <div class="create-post-toolbar">
                 <input id="mediaFile" type="file" accept="image/*,video/*" multiple style="display:none;" onchange="handleFileSelect(this)">
-
+ 
                 <div class="toolbar-actions">
                     <button type="button" class="toolbar-btn" onclick="document.getElementById('mediaFile').click()" title="Photo/Video">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         <span>Photo/Video</span>
                     </button>
-
+ 
                     <button type="button" class="toolbar-btn" onclick="toggleLocationInput()" title="Location" id="locationToggleBtn">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
                         <span>Location</span>
                     </button>
-
+ 
                     <button type="button" class="toolbar-btn" onclick="toggleFeeling()" title="Feeling">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                         <span>Feeling</span>
                     </button>
                 </div>
-
+ 
                 <button onclick="createPost()" class="post-submit-btn">Post</button>
             </div>
-
+ 
             <!-- Location input -->
             <div id="locationRow" style="display:none; margin-top:8px;">
                 <div style="position:relative;">
                     <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9b7cb8;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-                    <input type="text" id="locationInput" placeholder="Add location..." class="location-input" style="width:100%;padding:9px 12px 9px 34px;border:1px solid #f3e8ff;border-radius:20px;font-family:'Poppins',sans-serif;font-size:13px;background:#f9f0ff;outline:none;color:#2d1b4e;">
+                    <input type="text" id="locationInput" placeholder="Add location..." class="location-input"
+                           style="width:100%;padding:9px 12px 9px 34px;border:1px solid #f3e8ff;border-radius:20px;font-family:'Poppins',sans-serif;font-size:13px;background:#f9f0ff;outline:none;color:#2d1b4e;">
                 </div>
             </div>
-
+ 
             <!-- Feeling picker -->
             <div id="feelingRow" style="display:none; margin-top:8px;">
                 <div class="feeling-options">
@@ -133,31 +144,34 @@
                     <span class="feeling-chip" onclick="selectFeeling(this,'🤒 Sick')">🤒 Sick</span>
                 </div>
             </div>
-
+ 
             <!-- Selected feeling tag -->
             <div id="selectedFeelingTag" style="display:none; margin-top:8px;"></div>
         </div>
-
+ 
         <!-- FEED -->
         <div class="feed">
             <h3>Feed 📝</h3>
             <div id="feed"></div>
         </div>
     </div>
-
+ 
     <!-- RIGHT PROFILE CARD -->
     <div class="right">
         <div class="profile-card">
-
-            <!-- ✅ Notification bell inject hoga yahan -->
+ 
+            <!-- Notification bell -->
             <div id="notif-area"></div>
-
+ 
             <!-- HEADER -->
             <div class="profile-header" onclick="window.location.href='profile.html'" style="cursor:pointer;">
                 <img id="profilePic" src="https://via.placeholder.com/50">
-                <h3 id="username">Loading...</h3>
+                <div>
+                    <h3 id="username">Loading...</h3>
+                    <p style="font-size:11.5px;color:#9b7cb8;margin-top:2px;">View profile →</p>
+                </div>
             </div>
-
+ 
             <!-- INFO -->
             <div class="profile-info">
                 <div class="info-row">
@@ -173,7 +187,7 @@
                     <span id="status" class="status">Inactive</span>
                 </div>
             </div>
-
+ 
             <!-- PROGRESS -->
             <div class="progress-box">
                 <p>Profile Completion</p>
@@ -182,13 +196,15 @@
                 </div>
                 <span id="progressText">0% Complete</span>
             </div>
-
+ 
         </div>
     </div>
-
+ 
 </div>
-
+ 
 <div id="toast" class="toast">Updated Successfully ✅</div>
+ 
+
 
 <!-- ✅ FIX: notification.js pehle load karo taaki functions available hon -->
 <script src="notification.js"></script>
@@ -210,7 +226,7 @@ function showToast(msg) {
 // ── LOAD USER ──
 function loadUser() {
     const userId = localStorage.getItem("userId");
-    fetch(`http://localhost:5000/user/${userId}`)
+    fetch(`https://social-media-8im4.onrender.com/user/${userId}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById("username").innerText = data.username || "N/A";
@@ -245,7 +261,7 @@ function loadUser() {
 // ── LOAD POSTS (Feed) ──
 function loadPosts() {
     const currentUserId = localStorage.getItem("userId");
-    fetch("http://localhost:5000/posts")
+    fetch("https://social-media-8im4.onrender.com/posts")
     .then(res => res.json())
     .then(data => {
         const feed = document.getElementById("feed");
@@ -280,7 +296,7 @@ function loadPosts() {
 // ── LIKE ──
 function likePost(id) {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:5000/posts/${id}/like`, {
+    fetch(`https://social-media-8im4.onrender.com/posts/${id}/like`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -303,7 +319,7 @@ function addComment(id) {
     if (!text) return;
     if (isActive !== "true") { alert("Wait for admin approval ❌"); return; }
 
-    fetch(`http://localhost:5000/posts/${id}/comment`, {
+    fetch(`https://social-media-8im4.onrender.com/posts/${id}/comment`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -415,7 +431,7 @@ async function createPost() {
         if (files.length === 0) {
             const formData = new FormData();
             formData.append("caption", caption);
-            await fetch("http://localhost:5000/posts", {
+            await fetch("https://social-media-8im4.onrender.com/posts", {
                 method: "POST",
                 body: formData,
                 headers: { "Authorization": `Bearer ${token}` }
@@ -426,7 +442,7 @@ async function createPost() {
                 const formData = new FormData();
                 formData.append("caption", i === 0 ? caption : "");
                 formData.append("media", files[i]);
-                await fetch("http://localhost:5000/posts", {
+                await fetch("https://social-media-8im4.onrender.com/posts", {
                     method: "POST",
                     body: formData,
                     headers: { "Authorization": `Bearer ${token}` }  // ✅ FIXED
@@ -471,7 +487,7 @@ async function updateNavMsgBadge() {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
     try {
-        const res  = await fetch(`http://localhost:5000/unread-count/${userId}`);
+        const res  = await fetch(`https://social-media-8im4.onrender.com/unread-count/${userId}`);
         const data = await res.json();
 
         const chatLink = document.getElementById("chatNavLink");

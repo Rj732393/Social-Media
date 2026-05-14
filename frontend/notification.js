@@ -33,7 +33,7 @@ async function loadNotifications() {
  
     try {
         const token = localStorage.getItem("token");
-        const res   = await fetch(`http://localhost:5000/notifications/${userId}`, {
+        const res   = await fetch(`https://social-media-8im4.onrender.com/notifications/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         const data = await res.json();
@@ -71,7 +71,7 @@ async function markAllAsRead() {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
     try {
-        await fetch("http://localhost:5000/notifications/read", {
+        await fetch("https://social-media-8im4.onrender.com/notifications/read", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId })
