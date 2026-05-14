@@ -173,8 +173,21 @@ async function loadFriend() {
             .toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
     }
 
-    if (data.profilePic) document.getElementById("profilePic").src = data.profilePic;
-    if (data.coverImage) document.getElementById("coverImg").src   = data.coverImage;
+    const BASE_URL = "https://social-media-8im4.onrender.com";
+
+if (data.profilePic) {
+    document.getElementById("profilePic").src =
+        data.profilePic.startsWith("http")
+            ? data.profilePic
+            : `${BASE_URL}${data.profilePic}`;
+}
+
+if (data.coverImage) {
+    document.getElementById("coverImg").src =
+        data.coverImage.startsWith("http")
+            ? data.coverImage
+            : `${BASE_URL}${data.coverImage}`;
+}
 }
 
 // ── LOAD POSTS ──
